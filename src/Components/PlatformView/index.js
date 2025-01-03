@@ -4,14 +4,14 @@ import ScheduleCard from "../ScheduleCard";
 import { useSelector, useDispatch } from "react-redux";
 import { selectTabView } from "../../features/tabViews/tabViews";
 import { setPlatformInfoAction } from "../../features/platformInfo/platformInfo";
-import { saveTrainSchedule } from "../../features/trainSchedule/trainSchedule";
+import { saveTrainScheduleAction } from "../../features/trainSchedule/trainSchedule";
 
 const PlatformView = () => {
   const dispatch = useDispatch();
 
-//   const noOfPlatforms = useSelector(
-//     (state) => state.platformInfo.noOfPlatforms
-//   );
+  //   const noOfPlatforms = useSelector(
+  //     (state) => state.platformInfo.noOfPlatforms
+  //   );
   const platformInfo = useSelector((state) => state.platformInfo.platformInfo);
   const trainSchedule = useSelector(
     (state) => state.trainSchedule.trainSchedule
@@ -67,8 +67,8 @@ const PlatformView = () => {
         train: {
           ...train,
           trainNumber: null,
-            arrivalTime: null,
-            departureTime: null,
+          arrivalTime: null,
+          departureTime: null,
           trainStatus: "idle",
         },
         isOccupied: false,
@@ -76,7 +76,7 @@ const PlatformView = () => {
     } else {
       // trainStatus is idle
       // check if the train is departing
-      console.log(currentTime > departureTimeInMs,"this is times")
+
       if (currentTime >= departureTimeInMs) {
         return {
           ...platform,
@@ -92,8 +92,6 @@ const PlatformView = () => {
     }
   };
 
-//   console.log(platformInfo,"this is")
-
   const trainNotAlreadyPresent = (platformInfo, trainNumber) => {
     return !platformInfo.some(
       (platform) => platform.train.trainNumber === trainNumber
@@ -102,115 +100,115 @@ const PlatformView = () => {
 
   const checkIfAllPlatformsAreEmpty = (platformInfo) => {
     return !platformInfo.some(
-        (platform) => platform.train.trainStatus !== 'departed'
-      )
-  } 
+      (platform) => platform.train.trainStatus !== "departed"
+    );
+  };
 
   useEffect(() => {
-    if (simulationActive) {
-      const interval = setInterval(() => {
+    const interval = setInterval(() => {
+      if (!simulationActive) {
+        clearInterval(interval);
+        return;
+      }
 
-        const currentTime = new Date().getTime();
+      const currentTime = new Date().getTime();
 
-        const updatePlatformInfoState = (currentTime) => {
-
-          const updatedPlatformInfo = platformInfoRef.current.map(
-            (platform) => {
-              // check if platform is occupied
-              if (platform?.isOccupied) {
-                // check the train status
-                return checkTrainStatus(platform, currentTime);
-
-              } else {
-                // check the schedule for the train that should be present at that time and update the platform info
-                if (trainScheduleRef.current.length === 0 && checkIfAllPlatformsAreEmpty(platformInfoRef.current)) {
-                    // console.log("this is called")
-                    clearInterval(interval);
-                    return platform
-                }
-
-                const trainsThatShouldBePresent =
-                  trainScheduleRef.current.filter(
-                    ({ arrivalTime, departureTime, trainNumber }) => {
-                      const arrivalTimeInMs = new Date(arrivalTime).getTime();
-                      const departureTimeInMs = new Date(
-                        departureTime
-                      ).getTime();
-
-                      return (
-                        currentTime >= arrivalTimeInMs &&
-                        // currentTime < departureTimeInMs &&
-                        trainNotAlreadyPresent(
-                          platformInfoRef.current,
-                          trainNumber
-                        )
-                      );
-                    }
-                  );
-
-                
-
-
-                if (trainsThatShouldBePresent?.length) {
-
-                    const selectedTrain = trainsThatShouldBePresent[0];
-
-                    const modifiedPlatform = {
-                      ...platform,
-                      isOccupied: true,
-                      train: {
-                        trainNumber: selectedTrain.trainNumber,
-                        arrivalTime: selectedTrain.arrivalTime,
-                        departureTime: selectedTrain.departureTime,
-                        priority: selectedTrain.priority,
-                        trainStatus: "arriving",
-                      },
-                    };
-
-                    // update the schedule copy
-                    trainScheduleRef.current = trainScheduleRef.current.filter(
-                      (train) => train.trainNumber !== selectedTrain.trainNumber
-                    );
-                    dispatch(saveTrainSchedule(trainScheduleRef.current));
-
-                    return modifiedPlatform;
-
-                } else {
-                    return platform;
-                }
-              }
+      const updatePlatformInfoState = (currentTime) => {
+        const updatedPlatformInfo = platformInfoRef.current.map((platform) => {
+          // check if platform is occupied
+          if (platform?.isOccupied) {
+            // check the train status
+            return checkTrainStatus(platform, currentTime);
+          } else {
+            // check the schedule for the train that should be present at that time and update the platform info
+            if (
+              trainScheduleRef.current.length === 0 &&
+              checkIfAllPlatformsAreEmpty(platformInfoRef.current)
+            ) {
+              clearInterval(interval);
+              return platform;
             }
-          );
 
-          dispatch(setPlatformInfoAction(updatedPlatformInfo));
-        };
+            const trainsThatShouldBePresent = trainScheduleRef.current.filter(
+              ({ arrivalTime, departureTime, trainNumber }) => {
+                const arrivalTimeInMs = new Date(arrivalTime).getTime();
+                //   const departureTimeInMs = new Date(
+                //     departureTime
+                //   ).getTime();
 
-        updatePlatformInfoState(currentTime);
-      }, 5000);
+                return (
+                  currentTime >= arrivalTimeInMs &&
+                  // currentTime < departureTimeInMs &&
+                  trainNotAlreadyPresent(platformInfoRef.current, trainNumber)
+                );
+              }
+            );
 
-      return () => clearInterval(interval);
-    }
+            console.log("this is", trainsThatShouldBePresent);
+
+            if (trainsThatShouldBePresent?.length) {
+              const selectedTrain = trainsThatShouldBePresent[0];
+
+              const modifiedPlatform = {
+                ...platform,
+                isOccupied: true,
+                train: {
+                  trainNumber: selectedTrain.trainNumber,
+                  arrivalTime: selectedTrain.arrivalTime,
+                  departureTime: selectedTrain.departureTime,
+                  priority: selectedTrain.priority,
+                  trainStatus: "arriving",
+                },
+              };
+
+              // update the schedule copy
+              trainScheduleRef.current = trainScheduleRef.current.filter(
+                (train) => train.trainNumber !== selectedTrain.trainNumber
+              );
+              dispatch(saveTrainScheduleAction(trainScheduleRef.current));
+
+              return modifiedPlatform;
+            } else {
+              return platform;
+            }
+          }
+        });
+
+        dispatch(setPlatformInfoAction(updatedPlatformInfo));
+      };
+
+      updatePlatformInfoState(currentTime);
+    }, 5000);
+
+    return () => clearInterval(interval);
   }, [simulationActive]);
 
-//   if (!noOfPlatforms || trainSchedule.length === 0) {
-//     dispatch(selectTabView("Platform and Schedule Input"));
-//     return;
-//   }
+  //   if (!noOfPlatforms || trainSchedule.length === 0) {
+  //     dispatch(selectTabView("Platform and Schedule Input"));
+  //     return;
+  //   }
 
   return (
     <div className="train-platform-view">
       <ScheduleCard trainSchedule={trainSchedule} />
       <div className="train-platform-view-platforms-container">
         {platformInfo?.map(({ platformNumber, train }) => {
-            const currentTime = new Date().getTime();
-            const timeLeftForDeparture = train?.trainStatus === 'idle' ? ` - Departing in ${((new Date(train?.departureTime).getTime() - currentTime) / 1000).toFixed(0)} seconds.` : ''
+          const currentTime = new Date().getTime();
+          const timeLeftForDeparture =
+            train?.trainStatus === "idle"
+              ? ` - Departing in ${(
+                  (new Date(train?.departureTime).getTime() - currentTime) /
+                  1000
+                ).toFixed(0)} seconds.`
+              : "";
 
           return (
             <div key={platformNumber} className="train-platform-view-platform">
               {`Platform ${platformNumber}`}
               {train?.trainNumber ? (
                 <div className={`train-block ${train?.trainStatus}`}>
-                  {train?.trainNumber}{timeLeftForDeparture}
+                  {train?.trainNumber}
+                  {timeLeftForDeparture}
                 </div>
               ) : null}
             </div>

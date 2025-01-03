@@ -5,10 +5,15 @@ export const trainScheduleSlice = createSlice({
     initialState: {
         trainSchedule: [],
         noOfPlatforms: 0,
+        trainDashboardInfo: [],
     },
     reducers: {
-        saveTrainSchedule: (state, action) => {
+        saveTrainScheduleAction: (state, action) => {
         state.trainSchedule = action.payload;
+        },
+
+        saveTrainDashboardInfoAction: (state, action) => {
+        state.trainDashboardInfo = action.payload;
         },
 
         setNoOfPlatformsAction: (state, action) => {
@@ -17,6 +22,6 @@ export const trainScheduleSlice = createSlice({
     },
     });
 
-export const { saveTrainSchedule, setNoOfPlatformsAction } = trainScheduleSlice.actions;
+export const { saveTrainScheduleAction, setNoOfPlatformsAction, saveTrainDashboardInfoAction } = trainScheduleSlice.actions;
 
 export default trainScheduleSlice.reducer;

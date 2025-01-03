@@ -6,11 +6,11 @@ export const simulationControlSlice = createSlice({
         simulationActive: false,
     },
     reducers: {
-        startSimulationAction: (state, action) => {
+        startSimulationAction: (state) => {
         state.simulationActive = true;
         },
 
-        stopSimulationAction: (state, action) => {
+        stopSimulationAction: (state) => {
         state.simulationActive = false;
         },
     },

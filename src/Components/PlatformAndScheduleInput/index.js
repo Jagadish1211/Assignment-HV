@@ -3,7 +3,7 @@ import React, { useState } from "react";
 import Papa from "papaparse";
 import { useDispatch } from "react-redux";
 
-import { saveTrainSchedule } from "../../features/trainSchedule/trainSchedule";
+import { saveTrainScheduleAction, saveTrainDashboardInfoAction } from "../../features/trainSchedule/trainSchedule";
 import {
   setNoOfPlatformsAction,
   setPlatformInfoAction,
@@ -22,7 +22,8 @@ const PlatformInput = () => {
     if (noOfPlatforms && trainSchedule) {
       const sortedSchedule = sortScheduleByArrivalTimeAndPriority(trainSchedule);
       console.log("trainSchedule", sortedSchedule);
-      dispatch(saveTrainSchedule(sortedSchedule));
+      dispatch(saveTrainScheduleAction(sortedSchedule));
+      dispatch(saveTrainDashboardInfoAction(sortedSchedule));
       dispatch(setNoOfPlatformsAction(noOfPlatforms));
 
       const initialPlatformInfo = Array.from(

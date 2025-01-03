@@ -3,6 +3,7 @@ import "./App.scss";
 import PlatformView from "./Components/PlatformView";
 import TabView from "./Components/TabView";
 import PlatformInput from "./Components/PlatformAndScheduleInput";
+import Dashboard from "./Components/Dashboard";
 
 function App() {
   const activeTabView = useSelector((state) => state.tabViews.activeTabView);
@@ -14,7 +15,7 @@ function App() {
       case "Platforms":
         return <PlatformView />;
       case "Dashboard":
-        return <div>Dashboard</div>;
+        return <Dashboard />;
       default:
         return <PlatformInput />;
     }
