@@ -1,0 +1,23 @@
+.platform-and-schedule-input-form-container {
+  margin: 70px;
+
+  form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    color: white;
+
+    label {
+        margin-right: 20px;
+    }
+
+    button {
+        background-color: whitesmoke;
+        border: none;
+        padding: 15px;
+        border-radius: 15px;
+        font-size: medium;
+        cursor: pointer;
+    }
+  }
+}

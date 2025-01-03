@@ -1,0 +1,15 @@
+
+.tab-view {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+
+    .tab {
+        background-color: whitesmoke;
+        border: none;
+        padding: 15px;
+        border-radius: 15px;
+        font-size: medium;
+        cursor: pointer;
+    }
+}

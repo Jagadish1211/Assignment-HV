@@ -1,0 +1,17 @@
+
+.train-schedule {
+    &-card {
+        display: flex;
+        flex-direction: column;
+        background-color: whitesmoke;
+
+        &-train {
+            width: 220px;
+            height: 50px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+}
+
