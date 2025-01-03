@@ -6,6 +6,7 @@ import { startSimulationAction, stopSimulationAction } from "../../features/simu
 const TabView = () => {
   const dispatch = useDispatch();
   const activeTabView = useSelector((state) => state.tabViews.activeTabView);
+  const simulationActive = useSelector((state) => state.simulationControl.simulationActive);
 
   const handleTabSelection = (tabInfo) => {
     dispatch(selectTabView(tabInfo));
@@ -22,10 +23,10 @@ const TabView = () => {
   const SimulationControls = () => {
     return activeTabView === "Platforms" ? (
       <>
-        <button className="tab" onClick={handleStartSimulation}>
+        <button className="tab" disabled={simulationActive} onClick={handleStartSimulation}>
           Start Simulation
         </button>
-        <button className="tab" onClick={handleStopSimulation}>
+        <button className="tab" disabled={!simulationActive} onClick={handleStopSimulation}>
           Stop Simulation
         </button>
       </>
@@ -38,14 +39,15 @@ const TabView = () => {
     <div className="tab-view">
       <button
         className="tab"
+        disabled={simulationActive}
         onClick={() => handleTabSelection("Platform and Schedule Input")}
       >
         Platform and Schedule Input
       </button>
-      <button className="tab" onClick={() => handleTabSelection("Platforms")}>
+      <button className="tab" disabled={simulationActive} onClick={() => handleTabSelection("Platforms")}>
         Platforms View
       </button>
-      <button className="tab" onClick={() => handleTabSelection("Dashboard")}>
+      <button className="tab" disabled={simulationActive} onClick={() => handleTabSelection("Dashboard")}>
         Dashboard
       </button>
 
