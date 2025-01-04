@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {
   saveTrainScheduleAction,
@@ -9,6 +9,7 @@ const AddDelayInput = ({ trainNumber }) => {
   // update schedule and dashboard with the latest arrival time
   const dispatch = useDispatch();
   const [delayTimeString, setDelayTimeString] = useState("");
+  const inputRef = useRef()
 
   const trainDashboardInfo = useSelector(
     (state) => state.trainSchedule.trainDashboardInfo
@@ -23,12 +24,12 @@ const AddDelayInput = ({ trainNumber }) => {
 
   const handleAddDelayToTrain = (trainNumber) => {
     // have the train number and time to be added
-    if (!/^\d{2}:\d{2}$/.test(delayTimeString)) {
+    if (!/^\d{2}:(?:[0-5][0-9])$/.test(delayTimeString)) {
       console.log("Please check format for entering delay");
       return;
     }
 
-    setDelayTimeString("");
+    inputRef.current.value= ''
 
     let newArrivalTime;
     let newArrivalTimeString;
@@ -66,7 +67,11 @@ const AddDelayInput = ({ trainNumber }) => {
           tempNewArrivalDateObject.getHours() < 10
             ? `0${tempNewArrivalDateObject.getHours()}`
             : tempNewArrivalDateObject.getHours()
-        }:${tempNewArrivalDateObject.getMinutes() < 10 ? `0${tempNewArrivalDateObject.getMinutes()}` : tempNewArrivalDateObject.getMinutes()}`;
+        }:${
+          tempNewArrivalDateObject.getMinutes() < 10
+            ? `0${tempNewArrivalDateObject.getMinutes()}`
+            : tempNewArrivalDateObject.getMinutes()
+        }`;
 
         return {
           ...train,
@@ -98,6 +103,7 @@ const AddDelayInput = ({ trainNumber }) => {
     <>
       <input
         name="delayTime"
+        ref={inputRef}
         onChange={(e) => handleTimeStringEntry(e)}
         type="text"
         id={`add-delay-${trainNumber}`}
