@@ -32,11 +32,12 @@ const AddDelayInput = ({ trainNumber }) => {
     inputRef.current.value= ''
 
     let newArrivalTime;
+    let newDepartureTime;
     let newArrivalTimeString;
 
     const updatedTrainSchedule = trainSchedule.map((train) => {
       if (train.trainNumber === trainNumber) {
-        const calculateNewArrivalTime = (time) => {
+        const calculateNewDelayedTime = (time) => {
           const getCurrentArrivalTime = new Date(time).getTime();
 
           const [delayHours, delayMinutes] = delayTimeString
@@ -60,7 +61,8 @@ const AddDelayInput = ({ trainNumber }) => {
           ).toISOString();
         };
 
-        newArrivalTime = calculateNewArrivalTime(train.arrivalTime);
+        newArrivalTime = calculateNewDelayedTime(train.arrivalTime);
+        newDepartureTime = calculateNewDelayedTime(train.departureTime)
 
         const tempNewArrivalDateObject = new Date(newArrivalTime);
         newArrivalTimeString = `${
@@ -77,6 +79,7 @@ const AddDelayInput = ({ trainNumber }) => {
           ...train,
           arrivalTime: newArrivalTime,
           arrivalTimeString: newArrivalTimeString,
+          departureTime: newDepartureTime
         };
       }
 
@@ -89,6 +92,7 @@ const AddDelayInput = ({ trainNumber }) => {
           ...train,
           arrivalTime: newArrivalTime,
           arrivalTimeString: newArrivalTimeString,
+          departureTime: newDepartureTime
         };
       }
 
