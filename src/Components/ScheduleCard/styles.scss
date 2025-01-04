@@ -6,14 +6,36 @@
         background-color: whitesmoke;
         height: 100%;
         position: sticky;
-        top: 70px;
+        top: 50px;
+        padding: 10px;
 
         &-train {
-            width: 220px;
+            width: 340px;
             height: 50px;
             display: flex;
-            justify-content: center;
+            padding-left: 10px;
+            // justify-content: center;
             align-items: center;
+
+            input {
+                width: 50px;
+                margin-right: 15px;
+                height: 30px;
+                border : 0.5px solid gray;
+            }
+
+            span {
+                margin-left: 25px;
+            }
+            
+            button {
+                padding: 5px;
+                border-radius: 5px;
+            }
+        }
+
+        &-delay-instruction {
+            padding-left: 10px;
         }
     }
 }
