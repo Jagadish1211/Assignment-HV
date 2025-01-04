@@ -9,7 +9,7 @@ import {
   saveTrainDashboardInfoAction,
 } from "../../features/trainSchedule/trainSchedule";
 import { stopSimulationAction } from "../../features/simulationControl/simulationControl";
-import { convertSecondsToHrMinSecFormat } from "../../utils"
+import { convertSecondsToHrMinSecFormat } from "../../Utils"
 
 const PlatformView = () => {
   const dispatch = useDispatch();

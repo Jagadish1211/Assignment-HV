@@ -1,6 +1,6 @@
 import "./styles.scss";
 import { useSelector } from "react-redux";
-import { convertSecondsToHrMinSecFormat } from "../../utils";
+import { convertSecondsToHrMinSecFormat } from "../../Utils";
 
 const Dashboard = () => {
     const trainDashboardInfo = useSelector((state) => state.trainSchedule.trainDashboardInfo);
