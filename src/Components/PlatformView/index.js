@@ -9,6 +9,7 @@ import {
   saveTrainDashboardInfoAction,
 } from "../../features/trainSchedule/trainSchedule";
 import { stopSimulationAction } from "../../features/simulationControl/simulationControl";
+import { convertSecondsToHrMinSecFormat } from "../../Utils"
 
 const PlatformView = () => {
   const dispatch = useDispatch();
@@ -308,10 +309,10 @@ const PlatformView = () => {
             const currentTime = new Date().getTime();
             const timeLeftForDeparture =
               train?.trainStatus === "idle"
-                ? ` - Departing in ${(
+                ? ` - Departing in ${convertSecondsToHrMinSecFormat(
                     (new Date(train?.departureTime).getTime() - currentTime) /
                     1000
-                  ).toFixed(0)} secs.`
+                  )}`
                 : "";
 
             return (
