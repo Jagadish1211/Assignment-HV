@@ -173,7 +173,6 @@ const PlatformView = () => {
     }
   };
 
-
   const trainNotAlreadyPresent = (platformInfo, trainNumber) => {
     return !platformInfo.some(
       (platform) => platform.train.trainNumber === trainNumber
