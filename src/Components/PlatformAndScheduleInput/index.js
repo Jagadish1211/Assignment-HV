@@ -9,7 +9,7 @@ import {
   setPlatformInfoAction,
 } from "../../features/platformInfo/platformInfo";
 import { selectTabView } from "../../features/tabViews/tabViews";
-import { sortScheduleByArrivalTimeAndPriority, formatTimeString } from "../../Utils";
+import { sortScheduleByArrivalTimeAndPriority, formatTimeString } from "../../utils";
 
 const PlatformInput = () => {
   const dispatch = useDispatch();
