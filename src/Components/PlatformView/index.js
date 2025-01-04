@@ -64,7 +64,7 @@ const PlatformView = () => {
 
         const delayInArrival = (
           (currentTime - arrivalTimeInMs) /
-          60000
+          1000
         ).toFixed(0);
 
         const updatedTrainDashboardInfo = trainDashboardInfoRef.current.map(
@@ -99,12 +99,12 @@ const PlatformView = () => {
 
         const delayInArrival = (
           (currentTime - arrivalTimeInMs) /
-          60000
+          1000
         ).toFixed(0);
 
         const delayInDeparture = (currentTime - departureTimeInMs >= 0 ? (
           (currentTime - departureTimeInMs) /
-          60000
+          1000
         ).toFixed(0) : '-')
 
         const updatedTrainDashboardInfo = trainDashboardInfoRef.current.map(

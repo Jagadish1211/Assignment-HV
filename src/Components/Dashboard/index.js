@@ -26,8 +26,8 @@ const Dashboard = () => {
             <th>Actual Arrival Time</th>
             <th>Scheduled Departure Time</th>
             <th>Actual Departure Time</th>
-            <th>Delay in Arrival (in minutes)</th>
-            <th>Delay in Departure (in minutes)</th>
+            <th>Delay in Arrival</th>
+            <th>Delay in Departure</th>
           </tr>
 
             {trainDashboardInfo?.map(({ trainNumber, priority, arrivalTime, actualArrivalTime, departureTime, actualDepartureTime, delayInArrival, delayInDeparture }) => {
