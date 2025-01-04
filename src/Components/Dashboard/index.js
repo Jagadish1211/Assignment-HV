@@ -1,5 +1,6 @@
 import "./styles.scss";
 import { useSelector } from "react-redux";
+import { convertSecondsToHrMinSecFormat } from "../../Utils";
 
 const Dashboard = () => {
     const trainDashboardInfo = useSelector((state) => state.trainSchedule.trainDashboardInfo);
@@ -38,8 +39,8 @@ const Dashboard = () => {
                         <td>{formatTimeDataForDashboard(actualArrivalTime)}</td>
                         <td>{formatTimeDataForDashboard(departureTime)}</td>
                         <td>{formatTimeDataForDashboard(actualDepartureTime)}</td>
-                        <td>{delayInArrival ?? '-'}</td>
-                        <td>{delayInDeparture ?? '-'}</td>
+                        <td>{convertSecondsToHrMinSecFormat(delayInArrival) || '-'}</td>
+                        <td>{convertSecondsToHrMinSecFormat(delayInDeparture) || '-'}</td>
                     </tr>
                 );
             })}

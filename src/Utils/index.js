@@ -42,6 +42,7 @@ export const formatTimeString = (time) => {
   };
 
 export const convertSecondsToHrMinSecFormat = (seconds) => {
+    if (!seconds || seconds === '-') return '-'
     const hours = Math.floor(seconds / 3600);
     const minutes = Math.floor((seconds % 3600) / 60);
     const remainingSeconds = (seconds % 60).toFixed(0);

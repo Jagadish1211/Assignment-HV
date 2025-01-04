@@ -66,14 +66,10 @@ const PlatformView = () => {
           (currentTime - arrivalTimeInMs) /
           60000
         ).toFixed(0);
+
         const updatedTrainDashboardInfo = trainDashboardInfoRef.current.map(
           (trainInfoItem) => {
             if (train.trainNumber === trainInfoItem.trainNumber) {
-              console.log({
-                ...trainInfoItem,
-                actualArrivalTime: currentTime,
-                delayInArrival,
-              });
 
               return {
                 ...trainInfoItem,
@@ -105,21 +101,22 @@ const PlatformView = () => {
           (currentTime - arrivalTimeInMs) /
           60000
         ).toFixed(0);
+
+        const delayInDeparture = (currentTime - departureTimeInMs >= 0 ? (
+          (currentTime - departureTimeInMs) /
+          60000
+        ).toFixed(0) : '-')
+
         const updatedTrainDashboardInfo = trainDashboardInfoRef.current.map(
           (trainInfoItem) => {
             if (train.trainNumber === trainInfoItem.trainNumber) {
-              console.log({
-                ...trainInfoItem,
-                actualArrivalTime: currentTime,
-                actualDepartureTime: currentTime,
-                delayInArrival,
-              });
 
               return {
                 ...trainInfoItem,
                 actualArrivalTime: currentTime,
                 actualDepartureTime: currentTime,
                 delayInArrival,
+                delayInDeparture ,
               };
             }
 
@@ -157,10 +154,13 @@ const PlatformView = () => {
 
       // idle to departure
       // get the departure time and delay in departure
-      const delayInDeparture = (
-        (currentTime - departureTimeInMs) /
-        60000
-      ).toFixed(0);
+      console.log(currentTime , departureTimeInMs,"this is")
+      const delayInDeparture = currentTime - departureTimeInMs  >= 0 ? (
+        (departureTimeInMs - currentTime) /
+        1000
+      ).toFixed(0) : '-';
+
+      console.log(delayInDeparture,"this is")
       const updatedTrainDashboardInfo = trainDashboardInfoRef.current.map(
         (trainInfoItem) => {
           if (train.trainNumber === trainInfoItem.trainNumber) {
