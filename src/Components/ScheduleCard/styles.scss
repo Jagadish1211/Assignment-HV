@@ -4,6 +4,9 @@
         display: flex;
         flex-direction: column;
         background-color: whitesmoke;
+        height: 100%;
+        position: sticky;
+        top: 70px;
 
         &-train {
             width: 220px;
