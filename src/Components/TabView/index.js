@@ -22,18 +22,15 @@ const TabView = () => {
   };
 
   const SimulationControls = () => {
-    return activeTabView === "Platforms" ? (
-      <>
-        <button className="tab" disabled={simulationActive || trainSchedule.length === 0 } onClick={handleStartSimulation}>
+    return  <>
+        <button className="tab" disabled={simulationActive || trainSchedule.length === 0 || activeTabView !== "Platforms"} onClick={handleStartSimulation}>
           Start Simulation
         </button>
-        <button className="tab" disabled={!simulationActive} onClick={handleStopSimulation}>
+        <button className="tab" disabled={!simulationActive   || activeTabView !== "Platforms"} onClick={handleStopSimulation}>
           Stop Simulation
         </button>
       </>
-    ) : (
-      <></>
-    );
+  
   };
 
   return (
