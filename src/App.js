@@ -1,9 +1,9 @@
 import { useSelector } from "react-redux";
 import "./App.scss";
-import PlatformView from "./components/PlatformView";
-import TabView from "./components/TabView";
-import PlatformInput from "./components/PlatformAndScheduleInput";
-import Dashboard from "./components/Dashboard";
+import PlatformView from "./Components/PlatformView";
+import TabView from "./Components/TabView";
+import PlatformInput from "./Components/PlatformAndScheduleInput";
+import Dashboard from "./Components/Dashboard";
 
 function App() {
   const activeTabView = useSelector((state) => state.tabViews.activeTabView);
