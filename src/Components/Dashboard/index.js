@@ -10,7 +10,7 @@ const Dashboard = () => {
         const hours = date.getHours();
         const minutes = date.getMinutes();
 
-        return `${hours}:${minutes}`;
+        return `${hours}:${minutes < 10 ? `0${minutes}` : minutes}`;
     }
 
   return (
@@ -25,13 +25,13 @@ const Dashboard = () => {
             <th>Actual Arrival Time</th>
             <th>Scheduled Departure Time</th>
             <th>Actual Departure Time</th>
-            <th>Delay in Arrival</th>
-            <th>Delay in Departure</th>
+            <th>Delay in Arrival (in minutes)</th>
+            <th>Delay in Departure (in minutes)</th>
           </tr>
 
             {trainDashboardInfo?.map(({ trainNumber, priority, arrivalTime, actualArrivalTime, departureTime, actualDepartureTime, delayInArrival, delayInDeparture }) => {
                 return (
-                    <tr>
+                    <tr key={trainNumber}>
                         <td>{trainNumber}</td>
                         <td>{priority}</td>
                         <td>{formatTimeDataForDashboard(arrivalTime)}</td>

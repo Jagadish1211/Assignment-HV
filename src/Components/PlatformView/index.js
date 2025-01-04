@@ -4,7 +4,8 @@ import ScheduleCard from "../ScheduleCard";
 import { useSelector, useDispatch } from "react-redux";
 import { selectTabView } from "../../features/tabViews/tabViews";
 import { setPlatformInfoAction } from "../../features/platformInfo/platformInfo";
-import { saveTrainScheduleAction } from "../../features/trainSchedule/trainSchedule";
+import { saveTrainScheduleAction, saveTrainDashboardInfoAction } from "../../features/trainSchedule/trainSchedule";
+import { stopSimulationAction } from "../../features/simulationControl/simulationControl";
 
 const PlatformView = () => {
   const dispatch = useDispatch();
@@ -13,6 +14,7 @@ const PlatformView = () => {
   //     (state) => state.platformInfo.noOfPlatforms
   //   );
   const platformInfo = useSelector((state) => state.platformInfo.platformInfo);
+  const trainDashboardInfo = useSelector((state) => state.trainSchedule.trainDashboardInfo);
   const trainSchedule = useSelector(
     (state) => state.trainSchedule.trainSchedule
   );
@@ -22,6 +24,7 @@ const PlatformView = () => {
 
   const platformInfoRef = useRef(platformInfo);
   const trainScheduleRef = useRef(trainSchedule);
+  const trainDashboardInfoRef = useRef(trainDashboardInfo)
 
   useEffect(() => {
     platformInfoRef.current = platformInfo;
@@ -30,6 +33,10 @@ const PlatformView = () => {
   useEffect(() => {
     trainScheduleRef.current = trainSchedule;
   }, [trainSchedule]);
+
+  useEffect(() => {
+    trainDashboardInfoRef.current = trainDashboardInfo
+  },[trainDashboardInfo])
 
   // trainStatus has three states, 'arriving', 'departing', 'idle'
   // whenever the train state changes, the state of the dashboard and the state of the platform should change
@@ -40,9 +47,36 @@ const PlatformView = () => {
 
     // const arrivalTimeInMs = new Date(arrivalTime).getTime();
     const departureTimeInMs = new Date(departureTime).getTime();
+    const arrivalTimeInMs = new Date(arrivalTime).getTime();
 
     if (trainStatus === "arriving") {
       if (currentTime < departureTimeInMs) {
+        // arriving to idle
+        // get the actual arrival time and the delay if any
+
+        const delayInArrival =  ((currentTime - arrivalTimeInMs) / 60000).toFixed(0)
+        const updatedTrainDashboardInfo = trainDashboardInfoRef.current.map((trainInfoItem) => {
+          if(train.trainNumber === trainInfoItem.trainNumber) {
+            console.log({
+              ...trainInfoItem,
+              actualArrivalTime : currentTime,
+              delayInArrival
+            })
+
+            return {
+              ...trainInfoItem,
+              actualArrivalTime : currentTime,
+              delayInArrival
+            }
+          }
+
+          return trainInfoItem
+        })
+
+        trainDashboardInfoRef.current = updatedTrainDashboardInfo;
+        dispatch(saveTrainDashboardInfoAction(updatedTrainDashboardInfo))
+
+
         return {
           ...platform,
           train: {
@@ -52,6 +86,34 @@ const PlatformView = () => {
           isOccupied: true,
         };
       } else {
+        // arriving to departing-- for trains scheduled in the day before the simulation has run
+        // get the actual arrival time and the delay if any, and departure time
+
+        const delayInArrival =  ((currentTime - arrivalTimeInMs) / 60000).toFixed(0)
+        const updatedTrainDashboardInfo = trainDashboardInfoRef.current.map((trainInfoItem) => {
+          if(train.trainNumber === trainInfoItem.trainNumber) {
+            console.log({
+              ...trainInfoItem,
+              actualArrivalTime : currentTime,
+              actualDepartureTime : currentTime,
+              delayInArrival
+            })
+
+
+            return {
+              ...trainInfoItem,
+              actualArrivalTime : currentTime,
+              actualDepartureTime : currentTime,
+              delayInArrival
+            }
+          }
+
+          return trainInfoItem
+        })
+
+        trainDashboardInfoRef.current = updatedTrainDashboardInfo;
+        dispatch(saveTrainDashboardInfoAction(updatedTrainDashboardInfo))
+
         return {
           ...platform,
           train: {
@@ -77,7 +139,26 @@ const PlatformView = () => {
       // trainStatus is idle
       // check if the train is departing
 
+      // idle to departure
+      // get the departure time and delay in departure
+      const delayInDeparture = ((currentTime - departureTimeInMs) / 60000).toFixed(0);
+      const updatedTrainDashboardInfo = trainDashboardInfoRef.current.map((trainInfoItem) => {
+        if(train.trainNumber === trainInfoItem.trainNumber) {
+          return {
+            ...trainInfoItem,
+            actualDepartureTime : currentTime,
+            delayInDeparture
+          }
+        }
+
+        return trainInfoItem
+      })
+
+      trainDashboardInfoRef.current = updatedTrainDashboardInfo;
+      dispatch(saveTrainDashboardInfoAction(updatedTrainDashboardInfo))
+
       if (currentTime >= departureTimeInMs) {
+        // 
         return {
           ...platform,
           train: {
@@ -91,6 +172,7 @@ const PlatformView = () => {
       }
     }
   };
+
 
   const trainNotAlreadyPresent = (platformInfo, trainNumber) => {
     return !platformInfo.some(
@@ -126,6 +208,7 @@ const PlatformView = () => {
               checkIfAllPlatformsAreEmpty(platformInfoRef.current)
             ) {
               clearInterval(interval);
+              dispatch(stopSimulationAction())
               return platform;
             }
 
@@ -143,8 +226,6 @@ const PlatformView = () => {
                 );
               }
             );
-
-            console.log("this is", trainsThatShouldBePresent);
 
             if (trainsThatShouldBePresent?.length) {
               const selectedTrain = trainsThatShouldBePresent[0];
@@ -199,7 +280,7 @@ const PlatformView = () => {
               ? ` - Departing in ${(
                   (new Date(train?.departureTime).getTime() - currentTime) /
                   1000
-                ).toFixed(0)} seconds.`
+                ).toFixed(0)}s`
               : "";
 
           return (
