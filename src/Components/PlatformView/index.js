@@ -311,7 +311,7 @@ const PlatformView = () => {
                 ? ` - Departing in ${(
                     (new Date(train?.departureTime).getTime() - currentTime) /
                     1000
-                  ).toFixed(0)}s`
+                  ).toFixed(0)} secs.`
                 : "";
 
             return (
