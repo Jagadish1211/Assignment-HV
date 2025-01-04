@@ -2,7 +2,7 @@ import "./styles.scss";
 import React, { useEffect, useState, useRef } from "react";
 import ScheduleCard from "../ScheduleCard";
 import { useSelector, useDispatch } from "react-redux";
-import { selectTabView } from "../../features/tabViews/tabViews";
+// import { selectTabView } from "../../features/tabViews/tabViews";
 import { setPlatformInfoAction } from "../../features/platformInfo/platformInfo";
 import {
   saveTrainScheduleAction,
@@ -288,7 +288,7 @@ const PlatformView = () => {
     }, 5000);
 
     return () => clearInterval(interval);
-  }, [simulationActive]);
+  }, [simulationActive]); // eslint-disable-line react-hooks/exhaustive-deps
 
   //   if (!noOfPlatforms || trainSchedule.length === 0) {
   //     dispatch(selectTabView("Platform and Schedule Input"));
